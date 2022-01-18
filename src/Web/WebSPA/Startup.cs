@@ -126,12 +126,12 @@ public class Startup
             // the root of the angular app. (Where the package.json lives)
             spa.Options.SourcePath = "Client";
 
-            if (env.IsDevelopment())
-            { 
+            //if (env.IsDevelopment())
+            //{ 
 
-                // use the SpaServices extension method for angular, that will make the application to run "ng serve" for us, when in development.
-                spa.UseAngularCliServer(npmScript: "start");
-            }
+            //    // use the SpaServices extension method for angular, that will make the application to run "ng serve" for us, when in development.
+            //    spa.UseAngularCliServer(npmScript: "start");
+            //}
         });
     }
 
