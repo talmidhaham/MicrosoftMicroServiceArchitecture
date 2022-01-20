@@ -58,6 +58,27 @@ namespace Microsoft.eShopOnContainers.Services.Identity.API.Configuration
                 },
                 new Client
                 {
+                    ClientId = "Nebularjs",
+                    ClientName = "eShop NebularSPA OpenId Client",
+                    AllowedGrantTypes = GrantTypes.Implicit,
+                    AllowAccessTokensViaBrowser = true,
+                    RedirectUris =           { $"{clientsUrl["NebularSpa"]}/auth/callback" },
+                    RequireConsent = false,
+                    PostLogoutRedirectUris = { $"{clientsUrl["NebularSpa"]}/" },
+                    AllowedCorsOrigins =     { $"{clientsUrl["NebularSpa"]}" },
+                    AllowedScopes =
+                    {
+                        IdentityServerConstants.StandardScopes.OpenId,
+                        IdentityServerConstants.StandardScopes.Profile,
+                        "orders",
+                        "basket",
+                        "webshoppingagg",
+                        "orders.signalrhub",
+                        "webhooks"
+                    },
+                },
+                new Client
+                {
                     ClientId = "xamarin",
                     ClientName = "eShop Xamarin OpenId Client",
                     AllowedGrantTypes = GrantTypes.Hybrid,                    

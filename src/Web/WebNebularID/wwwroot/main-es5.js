@@ -3970,7 +3970,7 @@
       /* harmony import */
 
 
-      var rxjs__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(
+      var rxjs__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(
       /*! rxjs */
       25917);
       /* harmony import */
@@ -3982,21 +3982,34 @@
       /* harmony import */
 
 
-      var _angular_core__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(
+      var jwt_decode__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(
+      /*! jwt-decode */
+      48248);
+      /* harmony import */
+
+
+      var _angular_core__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(
       /*! @angular/core */
       37716);
+      /* harmony import */
+
+
+      var _nebular_auth__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(
+      /*! @nebular/auth */
+      86665);
 
       var _UserService = /*#__PURE__*/function (_data_users__WEBPACK_) {
         _inherits(_UserService, _data_users__WEBPACK_);
 
         var _super19 = _createSuper(_UserService);
 
-        function _UserService() {
+        function _UserService(authService) {
           var _this26;
 
           _classCallCheck(this, _UserService);
 
-          _this26 = _super19.apply(this, arguments);
+          _this26 = _super19.call(this);
+          _this26.authService = authService;
           _this26.time = new Date();
           _this26.users = {
             nick: {
@@ -4081,37 +4094,44 @@
             type: _this26.types.mobile,
             time: _this26.time.setHours(8, 0)
           }];
+
+          _this26.authService.onTokenChange().subscribe(function (token) {
+            if (token.isValid()) {
+              var payload = token.getPayload();
+              var userPayload = (0, jwt_decode__WEBPACK_IMPORTED_MODULE_1__["default"])(payload.access_token);
+              _this26.users.nick.name = userPayload.name;
+              window.console.log(_this26.user);
+            }
+          });
+
           return _this26;
         }
 
         _createClass(_UserService, [{
           key: "getUsers",
           value: function getUsers() {
-            return (0, rxjs__WEBPACK_IMPORTED_MODULE_1__.of)(this.users);
+            return (0, rxjs__WEBPACK_IMPORTED_MODULE_2__.of)(this.users);
           }
         }, {
           key: "getContacts",
           value: function getContacts() {
-            return (0, rxjs__WEBPACK_IMPORTED_MODULE_1__.of)(this.contacts);
+            return (0, rxjs__WEBPACK_IMPORTED_MODULE_2__.of)(this.contacts);
           }
         }, {
           key: "getRecentUsers",
           value: function getRecentUsers() {
-            return (0, rxjs__WEBPACK_IMPORTED_MODULE_1__.of)(this.recentUsers);
+            return (0, rxjs__WEBPACK_IMPORTED_MODULE_2__.of)(this.recentUsers);
           }
         }]);
 
         return _UserService;
       }(_data_users__WEBPACK_IMPORTED_MODULE_0__.UserData);
 
-      _UserService.ɵfac = /*@__PURE__*/function () {
-        var ɵUserService_BaseFactory;
-        return function UserService_Factory(t) {
-          return (ɵUserService_BaseFactory || (ɵUserService_BaseFactory = _angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵgetInheritedFactory"](_UserService)))(t || _UserService);
-        };
-      }();
+      _UserService.ɵfac = function UserService_Factory(t) {
+        return new (t || _UserService)(_angular_core__WEBPACK_IMPORTED_MODULE_3__["ɵɵinject"](_nebular_auth__WEBPACK_IMPORTED_MODULE_4__.NbAuthService));
+      };
 
-      _UserService.ɵprov = /*@__PURE__*/_angular_core__WEBPACK_IMPORTED_MODULE_2__["ɵɵdefineInjectable"]({
+      _UserService.ɵprov = /*@__PURE__*/_angular_core__WEBPACK_IMPORTED_MODULE_3__["ɵɵdefineInjectable"]({
         token: _UserService,
         factory: _UserService.ɵfac
       });
@@ -7765,19 +7785,13 @@
       /* harmony import */
 
 
-      var _angular_router__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(
+      var _angular_router__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(
       /*! @angular/router */
       39895);
       /* harmony import */
 
 
-      var _nebular_auth__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(
-      /*! @nebular/auth */
-      86665);
-      /* harmony import */
-
-
-      var _angular_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(
+      var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(
       /*! @angular/core */
       37716);
 
@@ -7794,27 +7808,46 @@
         }
       }, {
         path: 'auth',
-        component: _nebular_auth__WEBPACK_IMPORTED_MODULE_0__.NbAuthComponent,
-        children: [{
-          path: '',
-          component: _nebular_auth__WEBPACK_IMPORTED_MODULE_0__.NbLoginComponent
-        }, {
-          path: 'login',
-          component: _nebular_auth__WEBPACK_IMPORTED_MODULE_0__.NbLoginComponent
-        }, {
-          path: 'register',
-          component: _nebular_auth__WEBPACK_IMPORTED_MODULE_0__.NbRegisterComponent
-        }, {
-          path: 'logout',
-          component: _nebular_auth__WEBPACK_IMPORTED_MODULE_0__.NbLogoutComponent
-        }, {
-          path: 'request-password',
-          component: _nebular_auth__WEBPACK_IMPORTED_MODULE_0__.NbRequestPasswordComponent
-        }, {
-          path: 'reset-password',
-          component: _nebular_auth__WEBPACK_IMPORTED_MODULE_0__.NbResetPasswordComponent
-        }]
-      }, {
+        loadChildren: function loadChildren() {
+          return __webpack_require__.e(
+          /*! import() */
+          "src_app_Auth_oauth2_module_ts").then(__webpack_require__.bind(__webpack_require__,
+          /*! ./Auth/oauth2.module */
+          78760)).then(function (c) {
+            return c.OAuth2PlaygroundModule;
+          });
+        }
+      }, // {
+      //   path: 'auth',
+      //   component: NbAuthComponent,
+      //   children: [
+      //     {
+      //       path: '',
+      //       component: NbLoginComponent,
+      //     },
+      //     {
+      //       path: 'login',
+      //       component: NbLoginComponent,
+      //     },
+      //     {
+      //       path: 'register',
+      //       component: NbRegisterComponent,
+      //     },
+      //     {
+      //       path: 'logout',
+      //       component: NbLogoutComponent,
+      //     },
+      //     {
+      //       path: 'request-password',
+      //       component: NbRequestPasswordComponent,
+      //     },
+      //     {
+      //       path: 'reset-password',
+      //       component: NbResetPasswordComponent,
+      //     },
+      //   ],
+      // },
+      {
         path: '',
         redirectTo: 'pages',
         pathMatch: 'full'
@@ -7834,17 +7867,17 @@
         return new (t || _AppRoutingModule)();
       };
 
-      _AppRoutingModule.ɵmod = /*@__PURE__*/_angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵdefineNgModule"]({
+      _AppRoutingModule.ɵmod = /*@__PURE__*/_angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵdefineNgModule"]({
         type: _AppRoutingModule
       });
-      _AppRoutingModule.ɵinj = /*@__PURE__*/_angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵdefineInjector"]({
-        imports: [[_angular_router__WEBPACK_IMPORTED_MODULE_2__.RouterModule.forRoot(_routes, config)], _angular_router__WEBPACK_IMPORTED_MODULE_2__.RouterModule]
+      _AppRoutingModule.ɵinj = /*@__PURE__*/_angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵdefineInjector"]({
+        imports: [[_angular_router__WEBPACK_IMPORTED_MODULE_1__.RouterModule.forRoot(_routes, config)], _angular_router__WEBPACK_IMPORTED_MODULE_1__.RouterModule]
       });
 
       (function () {
-        (typeof ngJitMode === "undefined" || ngJitMode) && _angular_core__WEBPACK_IMPORTED_MODULE_1__["ɵɵsetNgModuleScope"](_AppRoutingModule, {
-          imports: [_angular_router__WEBPACK_IMPORTED_MODULE_2__.RouterModule],
-          exports: [_angular_router__WEBPACK_IMPORTED_MODULE_2__.RouterModule]
+        (typeof ngJitMode === "undefined" || ngJitMode) && _angular_core__WEBPACK_IMPORTED_MODULE_0__["ɵɵsetNgModuleScope"](_AppRoutingModule, {
+          imports: [_angular_router__WEBPACK_IMPORTED_MODULE_1__.RouterModule],
+          exports: [_angular_router__WEBPACK_IMPORTED_MODULE_1__.RouterModule]
         });
       })();
       /***/
@@ -7956,6 +7989,14 @@
 
       __webpack_require__.d(__webpack_exports__, {
         /* harmony export */
+        "AuthAzureToken": function AuthAzureToken() {
+          return (
+            /* binding */
+            _AuthAzureToken
+          );
+        },
+
+        /* harmony export */
         "AppModule": function AppModule() {
           return (
             /* binding */
@@ -7968,19 +8009,19 @@
       /* harmony import */
 
 
-      var _angular_platform_browser__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(
+      var _angular_platform_browser__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(
       /*! @angular/platform-browser */
       39075);
       /* harmony import */
 
 
-      var _angular_platform_browser_animations__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(
+      var _angular_platform_browser_animations__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(
       /*! @angular/platform-browser/animations */
       75835);
       /* harmony import */
 
 
-      var _angular_common_http__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(
+      var _angular_common_http__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(
       /*! @angular/common/http */
       91841);
       /* harmony import */
@@ -8010,13 +8051,19 @@
       /* harmony import */
 
 
-      var _nebular_theme__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(
+      var _nebular_theme__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(
       /*! @nebular/theme */
       42522);
       /* harmony import */
 
 
-      var _angular_core__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(
+      var _nebular_auth__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(
+      /*! @nebular/auth */
+      86665);
+      /* harmony import */
+
+
+      var _angular_core__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(
       /*! @angular/core */
       37716);
       /**
@@ -8026,6 +8073,30 @@
        */
 
 
+      var _AuthAzureToken = /*#__PURE__*/function (_nebular_auth__WEBPAC) {
+        _inherits(_AuthAzureToken, _nebular_auth__WEBPAC);
+
+        var _super21 = _createSuper(_AuthAzureToken);
+
+        function _AuthAzureToken() {
+          _classCallCheck(this, _AuthAzureToken);
+
+          return _super21.apply(this, arguments);
+        }
+
+        _createClass(_AuthAzureToken, [{
+          key: "getValue",
+          value: function getValue() {
+            return this.token.id_token;
+          }
+        }]);
+
+        return _AuthAzureToken;
+      }(_nebular_auth__WEBPACK_IMPORTED_MODULE_4__.NbAuthOAuth2JWTToken); // let's rename it to exclude name clashes
+
+
+      _AuthAzureToken.NAME = 'nb:auth:azure:token';
+
       var _AppModule = function _AppModule() {
         _classCallCheck(this, _AppModule);
       };
@@ -8034,22 +8105,47 @@
         return new (t || _AppModule)();
       };
 
-      _AppModule.ɵmod = /*@__PURE__*/_angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵdefineNgModule"]({
+      _AppModule.ɵmod = /*@__PURE__*/_angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵdefineNgModule"]({
         type: _AppModule,
         bootstrap: [_app_component__WEBPACK_IMPORTED_MODULE_2__.AppComponent]
       });
-      _AppModule.ɵinj = /*@__PURE__*/_angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵdefineInjector"]({
-        imports: [[_angular_platform_browser__WEBPACK_IMPORTED_MODULE_5__.BrowserModule, _angular_platform_browser_animations__WEBPACK_IMPORTED_MODULE_6__.BrowserAnimationsModule, _angular_common_http__WEBPACK_IMPORTED_MODULE_7__.HttpClientModule, _app_routing_module__WEBPACK_IMPORTED_MODULE_3__.AppRoutingModule, _nebular_theme__WEBPACK_IMPORTED_MODULE_8__.NbSidebarModule.forRoot(), _nebular_theme__WEBPACK_IMPORTED_MODULE_8__.NbMenuModule.forRoot(), _nebular_theme__WEBPACK_IMPORTED_MODULE_8__.NbDatepickerModule.forRoot(), _nebular_theme__WEBPACK_IMPORTED_MODULE_8__.NbDialogModule.forRoot(), _nebular_theme__WEBPACK_IMPORTED_MODULE_8__.NbWindowModule.forRoot(), _nebular_theme__WEBPACK_IMPORTED_MODULE_8__.NbToastrModule.forRoot(), _nebular_theme__WEBPACK_IMPORTED_MODULE_8__.NbChatModule.forRoot({
+      _AppModule.ɵinj = /*@__PURE__*/_angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵdefineInjector"]({
+        imports: [[_angular_platform_browser__WEBPACK_IMPORTED_MODULE_6__.BrowserModule, _angular_platform_browser_animations__WEBPACK_IMPORTED_MODULE_7__.BrowserAnimationsModule, _angular_common_http__WEBPACK_IMPORTED_MODULE_8__.HttpClientModule, _app_routing_module__WEBPACK_IMPORTED_MODULE_3__.AppRoutingModule, _nebular_theme__WEBPACK_IMPORTED_MODULE_9__.NbSidebarModule.forRoot(), _nebular_theme__WEBPACK_IMPORTED_MODULE_9__.NbMenuModule.forRoot(), _nebular_theme__WEBPACK_IMPORTED_MODULE_9__.NbDatepickerModule.forRoot(), _nebular_theme__WEBPACK_IMPORTED_MODULE_9__.NbDialogModule.forRoot(), _nebular_theme__WEBPACK_IMPORTED_MODULE_9__.NbWindowModule.forRoot(), _nebular_theme__WEBPACK_IMPORTED_MODULE_9__.NbToastrModule.forRoot(), _nebular_theme__WEBPACK_IMPORTED_MODULE_9__.NbChatModule.forRoot({
           messageGoogleMapKey: 'AIzaSyA_wNuCzia92MAmdLRzmqitRGvCF7wCZPY'
-        }), _core_core_module__WEBPACK_IMPORTED_MODULE_0__.CoreModule.forRoot(), _theme_theme_module__WEBPACK_IMPORTED_MODULE_1__.ThemeModule.forRoot()]]
+        }), _core_core_module__WEBPACK_IMPORTED_MODULE_0__.CoreModule.forRoot(), _theme_theme_module__WEBPACK_IMPORTED_MODULE_1__.ThemeModule.forRoot(), _nebular_auth__WEBPACK_IMPORTED_MODULE_4__.NbAuthModule.forRoot({
+          strategies: [_nebular_auth__WEBPACK_IMPORTED_MODULE_4__.NbOAuth2AuthStrategy.setup({
+            name: 'IdServer',
+            clientId: 'Nebularjs',
+            clientSecret: '',
+            authorize: {
+              endpoint: 'http://host.docker.internal:5105/connect/authorize',
+              responseType: _nebular_auth__WEBPACK_IMPORTED_MODULE_4__.NbOAuth2ResponseType.TOKEN = 'id_token token',
+              scope: 'openid profile orders basket webshoppingagg orders.signalrhub',
+              redirectUri: location.origin + '/auth/callback',
+              params: {
+                'nonce': getNounce()
+              }
+            },
+            token: {
+              "class": _AuthAzureToken
+            },
+            redirect: {
+              success: location.origin + '/'
+            }
+          })]
+        })]]
       });
 
       (function () {
-        (typeof ngJitMode === "undefined" || ngJitMode) && _angular_core__WEBPACK_IMPORTED_MODULE_4__["ɵɵsetNgModuleScope"](_AppModule, {
+        (typeof ngJitMode === "undefined" || ngJitMode) && _angular_core__WEBPACK_IMPORTED_MODULE_5__["ɵɵsetNgModuleScope"](_AppModule, {
           declarations: [_app_component__WEBPACK_IMPORTED_MODULE_2__.AppComponent],
-          imports: [_angular_platform_browser__WEBPACK_IMPORTED_MODULE_5__.BrowserModule, _angular_platform_browser_animations__WEBPACK_IMPORTED_MODULE_6__.BrowserAnimationsModule, _angular_common_http__WEBPACK_IMPORTED_MODULE_7__.HttpClientModule, _app_routing_module__WEBPACK_IMPORTED_MODULE_3__.AppRoutingModule, _nebular_theme__WEBPACK_IMPORTED_MODULE_8__.NbSidebarModule, _nebular_theme__WEBPACK_IMPORTED_MODULE_8__.NbMenuModule, _nebular_theme__WEBPACK_IMPORTED_MODULE_8__.NbDatepickerModule, _nebular_theme__WEBPACK_IMPORTED_MODULE_8__.NbDialogModule, _nebular_theme__WEBPACK_IMPORTED_MODULE_8__.NbWindowModule, _nebular_theme__WEBPACK_IMPORTED_MODULE_8__.NbToastrModule, _nebular_theme__WEBPACK_IMPORTED_MODULE_8__.NbChatModule, _core_core_module__WEBPACK_IMPORTED_MODULE_0__.CoreModule, _theme_theme_module__WEBPACK_IMPORTED_MODULE_1__.ThemeModule]
+          imports: [_angular_platform_browser__WEBPACK_IMPORTED_MODULE_6__.BrowserModule, _angular_platform_browser_animations__WEBPACK_IMPORTED_MODULE_7__.BrowserAnimationsModule, _angular_common_http__WEBPACK_IMPORTED_MODULE_8__.HttpClientModule, _app_routing_module__WEBPACK_IMPORTED_MODULE_3__.AppRoutingModule, _nebular_theme__WEBPACK_IMPORTED_MODULE_9__.NbSidebarModule, _nebular_theme__WEBPACK_IMPORTED_MODULE_9__.NbMenuModule, _nebular_theme__WEBPACK_IMPORTED_MODULE_9__.NbDatepickerModule, _nebular_theme__WEBPACK_IMPORTED_MODULE_9__.NbDialogModule, _nebular_theme__WEBPACK_IMPORTED_MODULE_9__.NbWindowModule, _nebular_theme__WEBPACK_IMPORTED_MODULE_9__.NbToastrModule, _nebular_theme__WEBPACK_IMPORTED_MODULE_9__.NbChatModule, _core_core_module__WEBPACK_IMPORTED_MODULE_0__.CoreModule, _theme_theme_module__WEBPACK_IMPORTED_MODULE_1__.ThemeModule, _nebular_auth__WEBPACK_IMPORTED_MODULE_4__.NbAuthModule]
         });
       })();
+
+      function getNounce() {
+        return 'N' + Math.random() + '' + Date.now();
+      }
       /***/
 
     },

@@ -12,6 +12,7 @@ namespace Microsoft.eShopOnContainers.Services.Identity.API.Data
 
             clientUrls.Add("Mvc", configuration.GetValue<string>("MvcClient"));
             clientUrls.Add("Spa", configuration.GetValue<string>("SpaClient"));
+            clientUrls.Add("NebularSpa", configuration.GetValue<string>("NebularSpaClient"));
             clientUrls.Add("Xamarin", configuration.GetValue<string>("XamarinCallback"));
             clientUrls.Add("BasketApi", configuration.GetValue<string>("BasketApiClient"));
             clientUrls.Add("OrderingApi", configuration.GetValue<string>("OrderingApiClient"));
